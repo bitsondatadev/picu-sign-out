@@ -127,6 +127,20 @@
           </tr>
         </table>
         {{/if ~}}
+        {{#if datepickers ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            {{#each datepickers ~}}
+            <th width="{{width}}%">{{@key}}</th>
+            {{/each ~}}
+          </tr>
+          <tr>
+            {{#each datepickers ~}}
+            <td width="{{width}}%">{{value}}</td>
+            {{/each ~}}
+          </tr>
+        </table>
+        {{/if ~}}
         {{#if other ~}}
         <table class="table-bordered" style="width: 100%;">
           <tr bgcolor="lightgray">

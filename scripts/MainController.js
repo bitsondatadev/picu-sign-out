@@ -31,13 +31,12 @@
 			
 			/**
 			 * 
-			 * Report logic  
+			 * Report Model Logic  
 			 */
 			function generateReportModel(inputModel, fieldModel){
 
         var reportModel = {
           title:'PICU Sign-out Report',
-          hpiUpdatedInfo:'',
           sections:{}
         };
 
@@ -58,21 +57,22 @@
                 if(!("checkboxes" in reportModel.sections[sectionTitle])){
                   reportModel.sections[sectionTitle].checkboxes = {};
                 }
-                reportModel.sections[sectionTitle].checkboxes[key] = {};
+                var label = field.templateOptions.label;
+                reportModel.sections[sectionTitle].checkboxes[label] = {};
               break;
 
               case "input":
                 if(!("inputs" in reportModel.sections[sectionTitle])){
                   reportModel.sections[sectionTitle].inputs = {};
                 }
-                reportModel.sections[sectionTitle].inputs[key] = { "value" : value };
+                reportModel.sections[sectionTitle].inputs[label] = { "value" : value };
               break;
 
               case "datepicker":
                 if(!("datepickers" in reportModel.sections[sectionTitle])){
                   reportModel.sections[sectionTitle].datepickers = {};
                 }
-                reportModel.sections[sectionTitle].datepickers[key] = { "value" : value };
+                reportModel.sections[sectionTitle].datepickers[label] = { "value" : value };
               break;
 
               case "textarea":
@@ -94,6 +94,7 @@
           }
         }
 
+        //set dynamic widths
         for (var sectionKey in reportModel.sections) {
             var section = reportModel.sections[sectionKey];
             if(isObject(section)){
@@ -111,64 +112,14 @@
         return reportModel;
 			}
 			
-      var reportModel = {
-        title:'PICU Sign-out Report',
-        hpiUpdatedInfo:'blahblahblah',
-        sections:{
-          'Lines | Tubes | Drains': {
-            diagnosisAssessment: 'more blah blah',
-            checkboxes:{
-              'PIV': {
-                width: 1/3
-              },
-              'NG': {
-                width: 1/3
-              },
-              'OG': {
-                width: 1/3
-              }
-            },
-            inputs:{
-              'ETT': {
-                width: 1/4,
-                value: 55.4
-              },
-              'Trach (size)': {
-                width: 1/4,
-                value: 57.6
-              },
-              'Trach (type)': {
-                width: 1/4,
-                value: 34.2
-              },
-             'Surgical Drains': {
-                width: 1/4,
-                value: 57.2
-              }
-            }
-          }
-        }
-      };
-      
-      function jsonToReportHTML(json) {
+      function onSubmit() {
+        var win = window.open("", "Title", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=780, height=200, top="+(screen.height-400)+", left="+(screen.width-840));
         var source   = document.getElementById("report-template").innerHTML;
         var template = Handlebars.compile(source);
         var context = generateReportModel(vm.model, fieldHashMap);
-        //context = reportModel;
   
         var html = template(context);
-        return html;
-      }
-      
-      /**
-			 * 
-			 * End report logic  
-			 */
-			
-			// function definition
-      function onSubmit() {
-        var win = window.open("", "Title", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=780, height=200, top="+(screen.height-400)+", left="+(screen.width-840));
-        win.document.body.innerHTML = jsonToReportHTML(vm.model);
+        win.document.body.innerHTML = html;
       }
 
 		}
