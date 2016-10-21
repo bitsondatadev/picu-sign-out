@@ -23,119 +23,138 @@
       vm.onSubmit = onSubmit;
 
 			vm.fields = fields.getFields();
-			var hashMap = fields.getHashMap();
+			var fieldHashMap = fields.getHashMap();
+
+      function isObject(variable){
+        return (typeof variable === "object") && (variable !== null);
+      }
 			
 			/**
 			 * 
 			 * Report logic  
 			 */
 			function generateReportModel(inputModel, fieldModel){
-			  var generationModel = {};
+
+        var reportModel = {
+          title:'PICU Sign-out Report',
+          hpiUpdatedInfo:'',
+          sections:{}
+        };
+
   			for (var key in inputModel) {
-  		    var field = inputModel[key];
-          if('key' in field && 'type' in field){
-            if(field.type === ""){
-              
+          var value = inputModel[key];
+  		    var field = fieldModel[key];
+
+          //remove the riff raff
+          if(!key.startsWith('noActiveIssues') && value !== null && 
+            value !== false && value !== ""){
+            var sectionTitle = field.templateOptions.section;
+            if(!(sectionTitle in reportModel.sections) && sectionTitle !== 'none'){
+              reportModel.sections[sectionTitle] = {};
+            }
+            
+            switch(field.type){
+              case "checkbox": 
+                if(!("checkboxes" in reportModel.sections[sectionTitle])){
+                  reportModel.sections[sectionTitle].checkboxes = {};
+                }
+                reportModel.sections[sectionTitle].checkboxes[key] = {};
+              break;
+
+              case "input":
+                if(!("inputs" in reportModel.sections[sectionTitle])){
+                  reportModel.sections[sectionTitle].inputs = {};
+                }
+                reportModel.sections[sectionTitle].inputs[key] = { "value" : value };
+              break;
+
+              case "datepicker":
+                if(!("datepickers" in reportModel.sections[sectionTitle])){
+                  reportModel.sections[sectionTitle].datepickers = {};
+                }
+                reportModel.sections[sectionTitle].datepickers[key] = { "value" : value };
+              break;
+
+              case "textarea":
+                if(field.key.startsWith('otherMeds')){
+                  reportModel.sections[sectionTitle].otherMeds = value;
+                }
+                else if(field.key.startsWith('other')){
+                  reportModel.sections[sectionTitle].other = value;
+                }
+                else if(field.key.startsWith('diagnosisAssessment')){
+                  reportModel.sections[sectionTitle].diagnosisAssessment = value;
+                }
+                else if(field.key.startsWith('hpiUpdatedInfo')){
+                  reportModel.hpiUpdatedInfo = value;
+                }
+              break;
+
             }
           }
         }
+
+        for (var sectionKey in reportModel.sections) {
+            var section = reportModel.sections[sectionKey];
+            if(isObject(section)){
+              for(var subKey in section){
+                var subSection = section[subKey];
+                if(isObject(subSection)){
+                  var numKeys = Object.keys(subSection).length;
+                  for(var key in subSection){
+                    subSection[key].width = 1 / numKeys;
+                  }
+                }
+              }
+            }
+        }
+        return reportModel;
 			}
 			
       var reportModel = {
         title:'PICU Sign-out Report',
         hpiUpdatedInfo:'blahblahblah',
-        sections:[
-          {
-            title:'Lines | Tubes | Drains',
+        sections:{
+          'Lines | Tubes | Drains': {
             diagnosisAssessment: 'more blah blah',
-            checkboxes:[
-              {
-                label:'PIV',
+            checkboxes:{
+              'PIV': {
                 width: 1/3
               },
-              {
-                label:'NG',
+              'NG': {
                 width: 1/3
               },
-              {
-                label:'OG',
+              'OG': {
                 width: 1/3
               }
-            ],
-            inputs:[
-              {
-                label:'ETT',
+            },
+            inputs:{
+              'ETT': {
                 width: 1/4,
                 value: 55.4
               },
-              {
-                label:'Trach (size)',
+              'Trach (size)': {
                 width: 1/4,
                 value: 57.6
               },
-              {
-                label:'Trach (type)',
+              'Trach (type)': {
                 width: 1/4,
                 value: 34.2
               },
-              {
-                label:'Surgical Drains',
+             'Surgical Drains': {
                 width: 1/4,
                 value: 57.2
               }
-            ]
-          },
-          {
-            title:'Neurology',
-            diagnosisAssessment: 'more blah blah',
-            checkboxes:[
-              {
-                label:'PIV',
-                width: 1/3
-              },
-              {
-                label:'NG',
-                width: 1/3
-              },
-              {
-                label:'OG',
-                width: 1/3
-              }
-            ],
-            inputs:[
-              {
-                label:'ETT',
-                width: 1/4,
-                value: 55.4
-              },
-              {
-                label:'Trach (size)',
-                width: 1/4,
-                value: 57.6
-              },
-              {
-                label:'Trach (type)',
-                width: 1/4,
-                value: 34.2
-              },
-              {
-                label:'Surgical Drains',
-                width: 1/4,
-                value: 57.2
-              }
-            ],
-            other:"This movie is okay. It's not the best movie I've ever seen, not the worst either. It has good acting by both Dakota Fanning and Elizabeth Olsen but it's a bit cliché. It's the typical best friends fall for the boy and don't let it come between them. Still a good movie, I guess. It was well made and acted and has good character development for the two girls but not the guy. Perhaps that was intentional to make you focus more on the two girls. Overall, a movie worth watching.",
-            otherMeds:'this is other meds'
+            }
           }
-          
-        ]
+        }
       };
       
       function jsonToReportHTML(json) {
         var source   = document.getElementById("report-template").innerHTML;
         var template = Handlebars.compile(source);
-        //var context = generateReportModel(vm.model, vm.fields);
-        var context = reportModel;
+        var context = generateReportModel(vm.model, fieldHashMap);
+        //context = reportModel;
   
         var html = template(context);
         return html;

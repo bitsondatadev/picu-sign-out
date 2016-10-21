@@ -18,7 +18,7 @@
 	  };
 	  
 	  var noneFields = {
-	    title:"",
+	    title:"none",
 	    fields:[
         {  
            "key":"hpiUpdatedInfo",
@@ -195,7 +195,7 @@
            }
         },
         {  
-           "key":"ltrOther",
+           "key":"otherLtr",
            "type":"textarea",
            "templateOptions":{  
               "section":"Lines | Tubes | Drains",

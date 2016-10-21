@@ -88,7 +88,7 @@
         </div>
         {{#each sections ~}}
         <div>
-        <h4>{{title}}</h4>
+        <h4>{{@key}}</h4>
         {{#if diagnosisAssessment ~}}
         <table class="table-bordered" style="width: 100%;">
           <tr bgcolor="lightgray">
@@ -103,7 +103,7 @@
         <table class="table-bordered" style="width: 100%;">
           <tr bgcolor="lightgray">
             {{#each checkboxes ~}}
-            <th width="{{width}}%">{{label}}</th>
+            <th width="{{width}}%">{{@key}}</th>
             {{/each ~}}
           </tr>
           <tr>
@@ -117,7 +117,7 @@
         <table class="table-bordered" style="width: 100%;">
           <tr bgcolor="lightgray">
             {{#each inputs ~}}
-            <th width="{{width}}%">{{label}}</th>
+            <th width="{{width}}%">{{@key}}</th>
             {{/each ~}}
           </tr>
           <tr>
