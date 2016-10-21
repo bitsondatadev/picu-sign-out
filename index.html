@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Advocate Christ PICU Sign-out</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+  </head>
+
+  <body ng-app="formlyApp" ng-controller="MainController as vm">
+    <div class="container-fluid">
+      <div class="row">
+        <img src="http://palsplaceonline.com/froot/62006/uploads/image/ChildrensHospital_Animals_Hz_4c_REVBLK.png" class="img-responsive" />
+      </div>
+      <div class="container col-md-8 col-md-offset-2">
+        <form ng-submit="vm.onSubmit()" form="vm.form" novalidate="">
+          <h1>PICU Sign-out.</h1>
+          <formly-form model="vm.model" fields="vm.fields" options="vm.options" form="vm.form">
+            <button type="submit" class="btn btn-primary submit-button" ng-disabled="vm.form.$invalid">Submit</button>
+          </formly-form>
+        </form>
+        <hr />
+        <h2>Model Value</h2>
+        <pre>{{vm.model | json}}</pre>
+      </div>
+    </div>
+    <div style="margin-top:30px">
+      <small>
+        This page made with ♥ by
+                <strong>
+          <span ng-if="!vm.author.name || !vm.author.url">
+            {{vm.author.name || 'anonymous'}}
+          </span>
+          <a ng-if="vm.author.url" ng-href="{{::vm.author.url}}">
+            {{vm.author.name}}
+          </a>
+        </strong> using the <a href="https://formly-js.github.io/angular-formly">angular-formly</a> library. 
+      </small>
+    </div>
+    <!-- Date Template -->
+    <script type="text/ng-template" id="datepicker.html">
+      <p class="input-group">
+        <input  type="text"
+                id="{{::id}}"
+                name="{{::id}}"
+                ng-model="model[options.key]"
+                class="form-control"
+                ng-click="datepicker.open($event)"
+                uib-datepicker-popup="{{to.datepickerOptions.format}}"
+                is-open="datepicker.opened"
+                datepicker-options="to.datepickerOptions" />
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="datepicker.open($event)" ng-disabled="to.disabled"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+    </script>
+    <!-- Report Template -->
+    <script id="report-template" type="text/x-handlebars-template">
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"><{{!}}/script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"><{{!}}/script>
+        <style>
+          div{
+              display: block;
+              position: relative;
+              width: 100%;
+              border: 2px solid black;
+              border-radius: 8px;
+          }
+        </style>
+      </head>
+      <body>
+      <h2>{{title}}</h2>
+        <div>
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            <th width="100%">HPI | Updated Info:</th>
+          </tr>
+          <tr>
+            <td width="100%">{{hpiUpdatedInfo}}</td>
+          </tr>
+        </table>
+        </div>
+        {{#each sections ~}}
+        <div>
+        <h4>{{title}}</h4>
+        {{#if diagnosisAssessment ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            <th width="100%">Diagnosis Assessment</th>
+          </tr>
+            <td width="100%">{{diagnosisAssessment}}</td>
+          <tr>
+          </tr>
+        </table>
+        {{/if ~}}
+        {{#if checkboxes ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            {{#each checkboxes ~}}
+            <th width="{{width}}%">{{label}}</th>
+            {{/each ~}}
+          </tr>
+          <tr>
+            {{#each checkboxes ~}}
+            <td width="{{width}}%"><span class="glyphicon glyphicon-ok"></td>
+            {{/each ~}}
+          </tr>
+        </table>
+        {{/if ~}}
+        {{#if inputs ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            {{#each inputs ~}}
+            <th width="{{width}}%">{{label}}</th>
+            {{/each ~}}
+          </tr>
+          <tr>
+            {{#each inputs ~}}
+            <td width="{{width}}%">{{value}}</td>
+            {{/each ~}}
+          </tr>
+        </table>
+        {{/if ~}}
+        {{#if other ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            <th width="100%">Other</th>
+          </tr>
+            <td width="100%">{{other}}</td>
+          <tr>
+          </tr>
+        </table>
+        {{/if ~}}
+        {{#if otherMeds ~}}
+        <table class="table-bordered" style="width: 100%;">
+          <tr bgcolor="lightgray">
+            <th width="100%">Other Meds</th>
+          </tr>
+            <td width="100%">{{otherMeds}}</td>
+          <tr>
+          </tr>
+        </table>
+        {{/if ~}}
+        </div>
+        {{/each ~}}
+      </body>
+      </html>
+
+    </script>
+    <!-- Application Dependencies -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/api-check/7.2.4/api-check.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-formly/6.11.0/formly.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-formly-templates-bootstrap/4.3.1/angular-formly-templates-bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.0.3/ui-bootstrap-tpls.js"></script>
+    <script data-require="handlebars.js@1.3.0" data-semver="1.3.0" src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js"></script>
+    <!-- Application Scripts -->
+    <script src="app.js"></script>
+    <script src="scripts/MainController.js"></script>
+    <script src="scripts/fields.js"></script>
+  </body>
+
+</html>
