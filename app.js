@@ -1,8 +1,8 @@
 (function() {
 
-	'use strict';
+  'use strict';
 
-	var app = angular.module('formlyApp', ['formly', 'formlyBootstrap', 'ui.bootstrap']);
+  var app = angular.module('formlyApp', ['formly', 'formlyBootstrap', 'ui.bootstrap']);
 
   app.run(function(formlyConfig) {
     var attributes = [

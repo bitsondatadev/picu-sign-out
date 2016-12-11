@@ -1,25 +1,24 @@
 (function(){
+  'use strict';
 
-	'use strict';
+  angular
+    .module('formlyApp')
+    .factory('fields', fields);
 
-	angular
-		.module('formlyApp')
-		.factory('fields', fields);
-
-	function fields() {
-	  
-	  var hashMap = {};
-	  
-	  var storeToHashMap = function(field){
-	    if('key' in field){
-	      hashMap[field.key] = field;
-	    }
-	    return field;
-	  };
-	  
-	  var noneFields = {
-	    title:"none",
-	    fields:[
+  function fields() {
+    
+    var hashMap = {};
+    
+    var storeToHashMap = function(field){
+      if('key' in field){
+        hashMap[field.key] = field;
+      }
+      return field;
+    };
+    
+    var noneFields = {
+      title:"none",
+      fields:[
         {  
            "key":"hpiUpdatedInfo",
            "type":"textarea",
@@ -28,12 +27,12 @@
               "label":"HPI Updated Info"
            }
         }
-	    ].map(storeToHashMap)
-	  };
-	  
-	  var ltrFields = {
-	    title:"Lines | Tubes | Drains",
-	    fields:[
+      ].map(storeToHashMap)
+    };
+    
+    var ltrFields = {
+      title:"Lines | Tubes | Drains",
+      fields:[
         {  
            "template":"<h3>Lines | Tubes | Drains</h3><hr/>"
         },
@@ -202,12 +201,12 @@
               "label":"Other"
            }
         }
-	    ].map(storeToHashMap)
-	  };
-	  
-	  var neuroFields = {
-	    title:"",
-	    fields:[
+      ].map(storeToHashMap)
+    };
+    
+    var neuroFields = {
+      title:"",
+      fields:[
         {  
            "template":"<h3>NEUROLOGY</h3><hr/>"
         },
@@ -336,12 +335,12 @@
            },
            "hideExpression":"model.noActiveIssuesNeuro"
         }
-	    ].map(storeToHashMap)
-	  };
-	  
-	  var respFields = {
-	    title:"",
-	    fields:[
+      ].map(storeToHashMap)
+    };
+    
+    var respFields = {
+      title:"",
+      fields:[
         {  
            "template":"<h3>RESPIRATORY</h3><hr/>"
         },
@@ -645,12 +644,12 @@
            },
            "hideExpression":"model.noActiveIssuesResp"
         }
-	    ].map(storeToHashMap)
-	  };
-	  
-	  var cvFields = {
-	    title:"",
-	    fields:[
+      ].map(storeToHashMap)
+    };
+    
+    var cvFields = {
+      title:"",
+      fields:[
         {  
            "template":"<h3>CV</h3><hr/>"
         },
@@ -770,27 +769,27 @@
            },
            "hideExpression":"model.noActiveIssuesCV"
         }
-	    ].map(storeToHashMap)
-	  };
-	  
-	  //alert(hashMap.noActiveIssuesCV.type);
+      ].map(storeToHashMap)
+    };
+    
+    //alert(hashMap.noActiveIssuesCV.type);
 
-		function getFields() {
-			return [].concat(
-			  noneFields.fields, 
-			  ltrFields.fields, 
-			  neuroFields.fields, 
-			  respFields.fields, 
-			  cvFields.fields);
-		}
-		
-		function getHashMap(){
-		  return hashMap;
-		}
+    function getFields() {
+      return [].concat(
+        noneFields.fields, 
+        ltrFields.fields, 
+        neuroFields.fields, 
+        respFields.fields, 
+        cvFields.fields);
+    }
+    
+    function getHashMap(){
+      return hashMap;
+    }
 
-		return {
-			getFields: getFields,
-			getHashMap: getHashMap
-		};
-	}
+    return {
+      getFields: getFields,
+      getHashMap: getHashMap
+    };
+  }
 })();
